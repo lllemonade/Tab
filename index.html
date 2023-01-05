@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab选项卡</title>
+</head>
+<style>
+  .container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .tab .tab-header {
+    display: flex;
+    position: relative;
+    border-bottom: 2px solid #ddd;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 2.5;
+    color: #303030;
+  }
+
+  .tab .active-line {
+    position: absolute;
+    top: 100%;
+    transform: translateX(0);
+    /* width: 50px; */
+    height: 2px;
+    background: #409eff;
+    transition: all .3s;
+  }
+
+  .tab .tab-item {
+    margin-right: 30px;
+    cursor: pointer;
+  }
+
+  .tab .tab-item.active {
+    color: #409eff;
+  }
+
+  .tab .tab-panel {
+    display: none;
+    padding: 16px 0;
+    font-size: 14px;
+  }
+
+  .tab .tab-panel.active {
+    display: block;
+  }
+</style>
+
+
+<body>
+  <div class="container">
+    <h2>Tab选项卡1</h2>
+    <div class="tab">
+      <div class="tab-header">
+        <div class="tab-item active">用户管理</div>
+        <div class="tab-item">配置管理</div>
+        <div class="tab-item">角色管理</div>
+        <div class="tab-item">定时任务</div>
+        <span class="active-line"></span>
+      </div>
+      <div class="tab-content">
+        <div class="tab-panel active">用户管理</div>
+        <div class="tab-panel">配置管理</div>
+        <div class="tab-panel">角色管理</div>
+        <div class="tab-panel">定时任务</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Tab选项卡2</h2>
+    <div class="tab">
+      <div class="tab-header">
+        <div class="tab-item active">用户管理</div>
+        <div class="tab-item">配置管理</div>
+        <div class="tab-item">角色管理</div>
+        <div class="tab-item">定时任务</div>
+        <span class="active-line"></span>
+      </div>
+      <div class="tab-content">
+        <div class="tab-panel active">用户管理</div>
+        <div class="tab-panel">配置管理</div>
+        <div class="tab-panel">角色管理</div>
+        <div class="tab-panel">定时任务</div>
+      </div>
+    </div>
+  </div>
+  <script>
+
+    class Tabs {
+      constructor($cotainer) {
+        this.$cotainer = $cotainer
+        this.$$tabItems = $cotainer.querySelectorAll('.tab .tab-item')
+        this.$$tabPanels = $cotainer.querySelectorAll('.tab .tab-panel')
+        this.$line = $cotainer.querySelector('.tab .active-line')
+
+        this.init()
+        this.bind()
+      }
+      init() {
+        this.$line.style.width = this.$$tabItems[0].offsetWidth + 'px'
+      }
+      bind() {
+        let self = this
+        this.$$tabItems.forEach($item => {
+          $item.onclick = function () {
+            //导航栏
+            self.$$tabItems.forEach($item => $item.classList.remove('active'))
+            this.classList.add('active')
+
+            //过渡横线
+            self.$line.style.width = this.offsetWidth + 'px'
+            self.$line.style.transform = `translateX(${this.offsetLeft}px)`
+
+            //内容
+            let index = [...self.$$tabItems].indexOf(this)
+            self.$$tabPanels.forEach($panel => $panel.classList.remove('active'))
+            self.$$tabPanels[index].classList.add('active')
+          }
+        });
+      }
+    }
+
+    document.querySelectorAll('.tab').forEach($cotainer => new Tabs($cotainer))
+
+  </script>
+</body>
+
+</html>
